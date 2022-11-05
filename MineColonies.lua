@@ -35,21 +35,25 @@ if debug then
 end
 
 if not debug then
-    ClearMonitor()
-    local workOrders = integrator.getWorkOrders()
-    local i = 1
-    for _, table in pairs(workOrders) do
-        local workItems = integrator.getWorkOrderResources(table["id"])
-        if workItems ~= nil then
-            monitor.blit(table["buildingName"], string.rep("f", string.len(table["buildingName"])), string.rep("d", string.len(table["buildingName"])))
-            i = NewLine(i)
-            for _, value in pairs(workItems) do
-                if value["status"] ~= "NOT_NEEDED" then
-                    monitor.write(value["displayName"] .. ": " .. value["available"] .. "/" .. value["needed"])
-                    i = NewLine(i)
+    while true do
+        ClearMonitor()
+        local workOrders = integrator.getWorkOrders()
+        local i = 1
+        for _, table in pairs(workOrders) do
+            local workItems = integrator.getWorkOrderResources(table["id"])
+            if workItems ~= nil then
+                monitor.blit(table["buildingName"], string.rep("f", string.len(table["buildingName"])), string.rep("d", string.len(table["buildingName"])))
+                i = NewLine(i)
+                for _, value in pairs(workItems) do
+                    if value["status"] ~= "NOT_NEEDED" then
+                        monitor.write(value["displayName"] .. ": " .. value["available"] .. "/" .. value["needed"])
+                        i = NewLine(i)
+                    end
                 end
             end
+            
         end
-        
+        sleep(5) 
     end
+    
 end
